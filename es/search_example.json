@@ -1,0 +1,19 @@
+{
+  "size": 10,
+  "query": {
+    "script_score": {
+      "query": {
+        "multi_match": {
+          "query": "aspirin 500 mg pain relief",
+          "fields": ["name^3", "description"]
+        }
+      },
+      "script": {
+        "source": "cosineSimilarity(params.query_vector, 'embedding') + 0.01 * _score",
+        "params": {
+          "query_vector": [/* replace with the normalized embedding vector from the embedding service */]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{"id":"p001","name":"Aspirin 500 mg","description":"Analgesic for mild pain and fever. Generic aspirin tablets.","category":"Analgesic","dose":"500 mg"}
+{"id":"p002","name":"Paracetamol 500 mg","description":"Paracetamol tablets for pain relief and fever reduction.","category":"Analgesic","dose":"500 mg"}
+{"id":"p003","name":"Amoxicillin 500 mg","description":"Antibiotic for bacterial infections. Use as prescribed by a clinician.","category":"Antibiotic","dose":"500 mg"}
+{"id":"p004","name":"Loratadine 10 mg","description":"Non-drowsy antihistamine for seasonal allergies.","category":"Antihistamine","dose":"10 mg"}
+{"id":"p005","name":"Omeprazole 20 mg","description":"Proton pump inhibitor for reflux and heartburn symptoms.","category":"Gastrointestinal","dose":"20 mg"}
+{"id":"p006","name":"Salbutamol Inhaler 100 mcg","description":"Short-acting bronchodilator for relief of bronchospasm.","category":"Respiratory","dose":"100 mcg"}
+{"id":"p007","name":"Metformin 500 mg","description":"Oral agent for type 2 diabetes; typically taken with food.","category":"Antidiabetic","dose":"500 mg"}
+{"id":"p008","name":"Atorvastatin 20 mg","description":"Statin medication to manage high cholesterol levels.","category":"Cardiovascular","dose":"20 mg"}
+{"id":"p009","name":"Ibuprofen 200 mg","description":"NSAID used for pain, inflammation, and fever; short-term use.","category":"Analgesic","dose":"200 mg"}
+{"id":"p010","name":"Cetirizine 10 mg","description":"Antihistamine for allergy relief; may cause mild drowsiness in some.","category":"Antihistamine","dose":"10 mg"}
+{"id":"p011","name":"Prednisolone 5 mg","description":"Oral corticosteroid used for short courses to reduce inflammation.","category":"Anti-inflammatory","dose":"5 mg"}
+{"id":"p012","name":"Clarithromycin 250 mg","description":"Macrolide antibiotic for certain respiratory and soft-tissue infections.","category":"Antibiotic","dose":"250 mg"}
+{"id":"p013","name":"Ranitidine 150 mg","description":"Histamine H2 receptor antagonist for heartburn (where still available).","category":"Gastrointestinal","dose":"150 mg"}
+{"id":"p014","name":"Salicylic Acid 2% Gel","description":"Topical preparation for acne and skin lesions.","category":"Dermatology","dose":"2%"}
+{"id":"p015","name":"Fexofenadine 120 mg","description":"Non-drowsy antihistamine for seasonal allergic rhinitis.","category":"Antihistamine","dose":"120 mg"}
+{"id":"p016","name":"Hydrocortisone Cream 1%","description":"Topical steroid cream for mild inflammatory skin conditions.","category":"Dermatology","dose":"1%"}
+{"id":"p017","name":"Co-codamol 8/500","description":"Combined analgesic (codeine/paracetamol) for moderate pain; short-term use.","category":"Analgesic","dose":"8/500 mg"}
+{"id":"p018","name":"Doxycycline 100 mg","description":"Tetracycline antibiotic commonly used for acne and respiratory infections.","category":"Antibiotic","dose":"100 mg"}
+{"id":"p019","name":"Gliclazide 80 mg","description":"Oral hypoglycemic used for type 2 diabetes management.","category":"Antidiabetic","dose":"80 mg"}
+{"id":"p020","name":"Omeprazole 10 mg","description":"Lower-dose formulation for reflux and occasional heartburn.","category":"Gastrointestinal","dose":"10 mg"}
+{"id":"p021","name":"Naproxen 250 mg","description":"Longer-acting NSAID for pain and inflammation.","category":"Analgesic","dose":"250 mg"}
+{"id":"p022","name":"Fluconazole 150 mg","description":"Single-dose antifungal for certain yeast infections.","category":"Antifungal","dose":"150 mg"}
+{"id":"p023","name":"Vitamin D 1000 IU","description":"Supplement to support bone health and vitamin D status.","category":"Supplement","dose":"1000 IU"}
+{"id":"p024","name":"Insulin Pen (Disposable)","description":"Pre-filled disposable insulin pen for diabetes; supplies vary by brand.","category":"Diabetes Care","dose":"varies"}
+{"id":"p025","name":"Saline Nasal Spray","description":"Non-medicated saline spray to relieve nasal congestion and dryness.","category":"Respiratory","dose":"N/A"}

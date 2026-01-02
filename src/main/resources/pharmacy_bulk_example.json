@@ -1,0 +1,9 @@
+{"index":{"_index":"pharmacy","_id":"p001"}}
+{"id":"p001","name":"Aspirin 500 mg","description":"Analgesic for mild pain and fever. Generic aspirin tablets.","category":"Analgesic","dose":"500 mg"}
+{"index":{"_index":"pharmacy","_id":"p002"}}
+{"id":"p002","name":"Paracetamol 500 mg","description":"Paracetamol tablets for pain relief and fever reduction.","category":"Analgesic","dose":"500 mg"}
+{"index":{"_index":"pharmacy","_id":"p003"}}
+{"id":"p003","name":"Amoxicillin 500 mg","description":"Antibiotic for bacterial infections. Use as prescribed by a clinician.","category":"Antibiotic","dose":"500 mg"}
+
+# NOTE: This example bulk file omits embeddings — use the script `scripts/embed_and_export.py --es-bulk`
+# to generate an ES bulk file that includes the `embedding` field with 384-d floats for each doc.

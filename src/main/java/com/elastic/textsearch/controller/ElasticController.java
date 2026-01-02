@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
@@ -94,6 +95,47 @@ public class ElasticController {
 	Query query = new CriteriaQuery(Criteria.where("name").is(name));
 		SearchHits<Product> hits = elasticsearchOperations.search(query, Product.class, coords);
 		return hits.stream().map(SearchHit::getContent).collect(Collectors.toList());
+	}
+
+	// Hybrid semantic + BM25 search using an external embedding service.
+	// Expects an embedding service at http://localhost:8000/embed that
+	// accepts JSON {"text": "..."} and returns {"embedding": [float,...]}
+	@GetMapping("/search")
+	public ResponseEntity<?> semanticSearch(@RequestParam("q") String q, @RequestParam(value = "index", defaultValue = "pharmacy") String index) {
+		RestTemplate rt = new RestTemplate();
+		String embedUrl = "http://localhost:8000/embed";
+		Map<String, Object> embedReq = Map.of("text", q);
+		Map embedResp;
+		try {
+			ResponseEntity<Map> embedEntity = rt.postForEntity(embedUrl, embedReq, Map.class);
+			embedResp = embedEntity.getBody();
+			if (embedResp == null || !embedResp.containsKey("embedding")) {
+				return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Embedding service returned no embedding");
+			}
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Embedding service not available: " + e.getMessage());
+		}
+		List<?> embedding = (List<?>) embedResp.get("embedding");
+
+		Map<String, Object> script = Map.of(
+			"source", "cosineSimilarity(params.query_vector, 'embedding') + 0.01 * _score",
+			"params", Map.of("query_vector", embedding)
+		);
+
+		Map<String, Object> multiMatch = Map.of("query", q, "fields", List.of("name^3", "description"));
+		Map<String, Object> query = Map.of("script_score", Map.of("query", Map.of("multi_match", multiMatch), "script", script));
+		Map<String, Object> payload = Map.of("size", 10, "query", query);
+
+		String url = elasticsearchUri;
+		if (!url.endsWith("/"))
+			url = url + "/";
+		url = url + index + "/_search";
+		try {
+			ResponseEntity<String> esResp = rt.postForEntity(url, payload, String.class);
+			return ResponseEntity.status(esResp.getStatusCode()).body(esResp.getBody());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Elasticsearch request failed: " + e.getMessage());
+		}
 	}
 
 	// Validate index name against a safe pattern for Elasticsearch index names.
