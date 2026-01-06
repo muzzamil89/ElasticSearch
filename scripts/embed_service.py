@@ -20,7 +20,15 @@ class BatchEmbedResponse(BaseModel):
     embeddings: List[List[float]]
 
 # Load model once on startup
-model = SentenceTransformer("all-MiniLM-L6-v2")
+try:
+    print("Loading SentenceTransformer model all-MiniLM-L6-v2...")
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    print("Model loaded successfully.")
+except Exception as e:
+    import traceback
+    traceback.print_exc()
+    # Re-raise so uvicorn shows the traceback and exits
+    raise
 
 @app.post("/embed", response_model=EmbedResponse)
 def embed(req: EmbedRequest):
