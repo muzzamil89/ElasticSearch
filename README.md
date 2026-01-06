@@ -119,17 +119,89 @@ Verify: `curl http://localhost:8000/docs` (interactive API)
 
 ### 4. Run Java Spring Boot App
 ```bash
+# Option A: run directly (default port 8081)
 mvn spring-boot:run
 # Server: http://localhost:8081
+
+# Option B: build fat JAR and run on an alternate port (useful if 8081 is occupied)
+mvn -DskipTests package
+java -Dserver.port=8082 -jar target/textsearch-0.0.1-SNAPSHOT.jar
+# Server (example): http://localhost:8082
 ```
 
 ### 5. Test Search Endpoint
 ```powershell
-# Search for aspirin
+# Search for aspirin (adjust host/port if you ran on 8082)
+# Default (if mvn spring-boot:run):
 curl "http://localhost:8081/products/search?q=aspirin%20for%20pain"
+# If you started the JAR on 8082:
+curl "http://localhost:8082/products/search?q=aspirin%20for%20pain"
 
 # Response: JSON with top products ranked by semantic + lexical relevance
 ```
+
+---
+
+### Final Verified Run (what we executed locally)
+Followed these exact commands during validation — these steps are known to work on a typical dev machine.
+
+1. **Start Elasticsearch (PowerShell helper)**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start_es.ps1 -TimeoutSeconds 180
+```
+
+2. **Create index with mapping (skip if index already exists)**
+```powershell
+Invoke-RestMethod -Method Put -Uri 'http://localhost:9200/pharmacy' `
+  -ContentType 'application/json' `
+  -Body (Get-Content -Raw -Path .\es\pharmacy_mapping.json)
+```
+
+3. **Generate embeddings and bulk file**
+```bash
+python scripts/embed_and_export.py \
+  --input src/main/resources/pharmacy_sample.jsonl \
+  --output src/main/resources/pharmacy_index.jsonl \
+  --es-bulk --index-name pharmacy
+```
+
+4. **Bulk index the generated data**
+```powershell
+Invoke-RestMethod -Method Post -Uri 'http://localhost:9200/_bulk' `
+  -ContentType 'application/x-ndjson' `
+  -Body (Get-Content -Raw -Path .\src\main\resources\pharmacy_index.bulk.json)
+```
+
+5. **Start embedding service (FastAPI)**
+```bash
+uvicorn scripts.embed_service:app --port 8000
+# Embedding endpoint: http://localhost:8000/embed
+```
+
+6. **Start Spring Boot (example: alternate port 8082)**
+```bash
+mvn -DskipTests package
+java -Dserver.port=8082 -jar target/textsearch-0.0.1-SNAPSHOT.jar
+```
+
+7. **Query the search endpoint and inspect top-5 results**
+```powershell
+curl "http://localhost:8082/products/search?q=aspirin%20for%20pain"
+```
+
+Sample top-5 output (id — score — name):
+```
+- p001 — 0.7487 — Aspirin 500 mg
+- p017 — 0.5244 — Co-codamol 8/500
+- p021 — 0.5224 — Naproxen 250 mg
+- p009 — 0.4852 — Ibuprofen 200 mg
+- p002 — 0.4792 — Paracetamol 500 mg
+```
+
+> Note: If a port is occupied (e.g., `8081`), run the JAR with `-Dserver.port=<port>` as shown above. If the index already exists, skip the create-index step and proceed to bulk indexing.
+
+---
+
 
 ## Evaluation & Testing
 
